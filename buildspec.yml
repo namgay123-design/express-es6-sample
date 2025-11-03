@@ -1,19 +1,22 @@
 version: 0.2
 
+env:
+  variables:
+    EB_ZIP: "app-bundle.zip"
+
 phases:
   install:
     commands:
-      - echo "Install phase"
-      - npm ci || npm install
+      - node -v
+      - npm -v
+      - npm ci
   build:
     commands:
-      - echo "Build phase"
-      - npm run build
-  post_build:
-    commands:
-      - echo "Zipping app for EB"
-      - zip -ry ../artifact.zip . -x ".git"
+      - echo "Building project..."
+      - npm run build || echo "No build script found"
+      - echo "Packaging application for Elastic Beanstalk..."
+      - zip -r "$EB_ZIP" * -x "**/node_modules/**"
 artifacts:
   files:
-    - artifact.zip
+    - app-bundle.zip
   discard-paths: yes
