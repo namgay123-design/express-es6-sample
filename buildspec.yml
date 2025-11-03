@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Install phase"
+      - npm ci || npm install
+  build:
+    commands:
+      - echo "Build phase"
+      - npm run build
+  post_build:
+    commands:
+      - echo "Zipping app for EB"
+      - zip -ry ../artifact.zip . -x ".git"
+artifacts:
+  files:
+    - artifact.zip
+  discard-paths: yes
